@@ -59,7 +59,7 @@ int rotator_cc_impl::work(int noutput_items,
     const gr_complex* in = (const gr_complex*)input_items[0];
     gr_complex* out = (gr_complex*)output_items[0];
 
-#ifdef APPLY_BROKEN_ROTATOR_WORKAROUND
+#if 0
     for (int i = 0; i < noutput_items; i++)
         out[i] = d_r.rotate(in[i]);
 #else
