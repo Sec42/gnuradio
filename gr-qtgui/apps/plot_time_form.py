@@ -66,7 +66,7 @@ class plot_time_form(plot_form):
             self.top_block.auto_scale(False)
 
     def enable_stem(self, state):
-        self.top_block.gui_snk.enable_stem_plot(state)
+        self.top_block.gui_snk.enable_stem_plot(bool(state))
         if(state):
             index = self._qwtmarkers['Circle']+1
         else:
@@ -75,5 +75,5 @@ class plot_time_form(plot_form):
             self._marker_edit[n].setCurrentIndex(index)
 
     def update_samp_rate(self):
-        sr = self.samp_rate_edit.text().toDouble()[0]
+        sr = float(self.samp_rate_edit.text())
         self.top_block.gui_snk.set_samp_rate(sr)

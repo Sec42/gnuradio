@@ -25,7 +25,7 @@ from __future__ import division
 from __future__ import unicode_literals
 
 try:
-    from PyQt5 import QtWidgets, Qt
+    from PyQt5 import QtWidgets, Qt, QtCore
     import sip
 except ImportError:
     import sys
@@ -54,12 +54,12 @@ class plot_form(QtWidgets.QWidget):
 
         # Create a save action
         self.save_act = QtWidgets.QAction("Save", self)
-        self.save_act.setShortcut(QtWidgets.QKeySequence.Save)
+        self.save_act.setShortcut(Qt.QKeySequence.Save)
         self.save_act.triggered.connect(self.save_figure)
 
         # Create an exit action
         self.exit_act = QtWidgets.QAction("Exit", self)
-        self.exit_act.setShortcut(QtWidgets.QKeySequence.Close)
+        self.exit_act.setShortcut(Qt.QKeySequence.Close)
         self.exit_act.triggered.connect(self.close)
 
         # Create a menu for the window
@@ -75,7 +75,7 @@ class plot_form(QtWidgets.QWidget):
         self.layout.setColumnStretch(2, 1)
 
         # Create Edit boxes for X-axis start/stop
-        self.size_val = QtWidgets.QIntValidator(0, top_block._max_nsamps, self)
+        self.size_val = Qt.QIntValidator(0, top_block._max_nsamps, self)
 
         self.start_edit = QtWidgets.QLineEdit(self)
         self.start_edit.setMinimumWidth(100)
@@ -119,10 +119,10 @@ class plot_form(QtWidgets.QWidget):
         self.left_col_form.addWidget(self.grid_check)
 
         # Create a slider to move the plot's y-axis offset
-        _ymax = numpy.int32(min(numpy.iinfo(numpy.int32).max, self.top_block._y_max))
-        _ymin = numpy.int32(max(numpy.iinfo(numpy.int32).min, self.top_block._y_min))
-        _yrng = numpy.int32(min(numpy.iinfo(numpy.int32).max, self.top_block._y_range))
-        _yval = numpy.int32(min(numpy.iinfo(numpy.int32).max, self.top_block._y_value))
+        _ymax = (min(numpy.iinfo(numpy.int32).max, self.top_block._y_max))
+        _ymin = (max(numpy.iinfo(numpy.int32).min, self.top_block._y_min))
+        _yrng = (min(numpy.iinfo(numpy.int32).max, self.top_block._y_range))
+        _yval = (min(numpy.iinfo(numpy.int32).max, self.top_block._y_value))
         self.ybar = QtWidgets.QSlider(Qt.Qt.Vertical, self)
         self.ybar.setMinimum(self._pos_scale*_ymin)
         self.ybar.setMaximum(self._pos_scale*_ymax)
@@ -177,7 +177,7 @@ class plot_form(QtWidgets.QWidget):
             self._line_forms[-1].addRow("Label:", self._label_edit[-1])
             self._label_edit[-1].returnPressed.connect(self.update_line_label)
 
-            width_val = QtWidgets.QIntValidator(1, 20, self)
+            width_val = Qt.QIntValidator(1, 20, self)
             self._size_edit.append(QtWidgets.QLineEdit(self))
             self._size_edit[-1].setValidator(width_val)
             self._size_edit[-1].setMinimumWidth(100)
@@ -234,13 +234,13 @@ class plot_form(QtWidgets.QWidget):
             self._line_forms[-1].addRow("Marker:", self._marker_edit[-1])
             self._marker_edit[-1].currentIndexChanged.connect(self.update_line_marker)
 
-            alpha_val = QtWidgets.QDoubleValidator(0, 1.0, 2, self)
+            alpha_val = Qt.QDoubleValidator(0, 1.0, 2, self)
             alpha_val.setTop(1.0)
             alpha = self.top_block.gui_snk.line_alpha(n)
             self._alpha_edit.append(QtWidgets.QLineEdit(self))
             self._alpha_edit[-1].setMinimumWidth(50)
             self._alpha_edit[-1].setMaximumWidth(100)
-            self._alpha_edit[-1].setText("{0]".format(alpha))
+            self._alpha_edit[-1].setText("{0}".format(alpha))
             self._alpha_edit[-1].setValidator(alpha_val)
             self._line_forms[-1].addRow("Alpha:", self._alpha_edit[-1])
             self._alpha_edit[-1].returnPressed.connect(self.update_line_alpha)
@@ -257,7 +257,7 @@ class plot_form(QtWidgets.QWidget):
 
     def update_line_size(self):
         index = self._line_tabs.currentIndex()
-        width = self._size_edit[index].text().toUInt()[0]
+        width = int(self._size_edit[index].text())
         self.top_block.gui_snk.set_line_width(index, width)
         self.update_line_alpha()
 
@@ -281,12 +281,12 @@ class plot_form(QtWidgets.QWidget):
 
     def update_line_alpha(self):
         index = self._line_tabs.currentIndex()
-        alpha = self._alpha_edit[index].text().toDouble()[0]
+        alpha = float(self._alpha_edit[index].text())
         self.top_block.gui_snk.set_line_alpha(index, alpha)
 
     def update_xaxis_pos(self):
-        newstart = self.start_edit.text().toUInt()[0]
-        newend = self.end_edit.text().toUInt()[0]
+        newstart = int(self.start_edit.text())
+        newend = int(self.end_edit.text())
         if(newstart != self._start or newend != self._end):
             if(newend < newstart):
                 QtWidgets.QMessageBox.information(
@@ -313,8 +313,8 @@ class plot_form(QtWidgets.QWidget):
 
     def update_yaxis_pos(self):
         if(not self.top_block._auto_scale):
-            newmin = self.y_min_edit.text().toDouble()[0]
-            newmax = self.y_max_edit.text().toDouble()[0]
+            newmin = float(self.y_min_edit.text())
+            newmax = float(self.y_max_edit.text())
             if(newmin != self._y_min or newmax != self._y_max):
                 self._y_min = newmin
                 self._y_max = newmax
@@ -342,8 +342,8 @@ class plot_form(QtWidgets.QWidget):
             self.ybar.setValue(self._y_max*self._pos_scale)
 
     def update_samp_rate(self):
-        sr = self.samp_rate_edit.text().toDouble()[0]
-        fr = self.freq_edit.text().toDouble()[0]
+        sr = int(self.samp_rate_edit.text())
+        fr = int(self.freq_edit.text())
         self.top_block.gui_snk.set_frequency_range(fr, sr)
         self.top_block._samp_rate = sr
         self.top_block.reset(self.top_block._start,
@@ -363,7 +363,7 @@ class plot_form(QtWidgets.QWidget):
             self.top_block.gui_snk.enable_grid(False)
 
     def save_figure(self):
-        qpix = QtWidgets.QPixmap.grabWidget(self.top_block.pyWin)
+        qpix = self.top_block.pyWin.grab()
         types = "JPEG file (*.jpg);;" + \
             "Portable Network Graphics file (*.png);;" + \
             "Bitmap file (*.bmp);;" + \
@@ -376,13 +376,13 @@ class plot_form(QtWidgets.QWidget):
         else:
             return
 
-        if(filetype.contains(".jpg")):
+        if(".jpg" in filetype):
             qpix.save(filename, "JPEG");
-        elif(filetype.contains(".png")):
+        elif(".png" in filetype):
             qpix.save(filename, "PNG");
-        elif(filetype.contains(".bmp")):
+        elif(".bmp" in filetype):
             qpix.save(filename, "BMP");
-        elif(filetype.contains(".tiff")):
+        elif(".tiff" in filetype):
             qpix.save(filename, "TIFF");
         else:
             qpix.save(filename, "JPEG");
