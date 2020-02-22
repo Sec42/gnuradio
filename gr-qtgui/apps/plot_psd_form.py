@@ -34,7 +34,7 @@ except ImportError:
     sys.exit(1)
 
 try:
-    from gnuradio.qtgui.plot_from import plot_form
+    from gnuradio.qtgui.plot_form import plot_form
 except ImportError:
     from plot_form import plot_form
 
