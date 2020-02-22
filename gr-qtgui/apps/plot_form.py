@@ -85,7 +85,7 @@ class plot_form(QtWidgets.QWidget):
         self.left_col_form.addRow("Start:", self.start_edit)
         self.start_edit.returnPressed.connect(self.update_xaxis_pos)
 
-        end = top_block._start + top_block._nsamps
+        end = top_block._start + top_block._max_nsamps
         self.end_edit = QtWidgets.QLineEdit(self)
         self.end_edit.setMinimumWidth(100)
         self.end_edit.setMaximumWidth(100)
@@ -93,6 +93,16 @@ class plot_form(QtWidgets.QWidget):
         self.end_edit.setValidator(self.size_val)
         self.left_col_form.addRow("End:", self.end_edit)
         self.end_edit.returnPressed.connect(self.update_xaxis_pos)
+#        self._end=end
+        top_block._nsamps=top_block._max_nsamps
+        def fo():
+#            self.top_block.reset(self._start,self.top_block._max_nsamps-2)
+            self.update_xaxis_slider(10)
+#            print "b"
+#            self.posbar.setMaximum(self.top_block._max_nsamps)
+#            self.update_xaxis_slider(0)
+#            self.update_xaxis_pos()
+        QtCore.QTimer.singleShot(100,fo)
 
         # Create a slider to move the position in the file
         self.posbar = QtWidgets.QSlider(Qt.Qt.Horizontal, self)
@@ -287,6 +297,11 @@ class plot_form(QtWidgets.QWidget):
     def update_xaxis_pos(self):
         newstart = int(self.start_edit.text())
         newend = int(self.end_edit.text())
+        print "max",self.top_block._max_nsamps
+        print "num",self.top_block._nsamps
+#        if newend>self.top_block._max_nsamps:
+#            newend=self.top_block._max_nsamps
+#            self.end_edit.setText("{0}".format(newend))
         if(newstart != self._start or newend != self._end):
             if(newend < newstart):
                 QtWidgets.QMessageBox.information(
@@ -300,6 +315,7 @@ class plot_form(QtWidgets.QWidget):
         self._end = newend
         self.posbar.setPageStep(self.top_block._nsamps)
         self.posbar.setValue(self._start)
+        self.posbar.setMaximum(self.top_block._max_nsamps-self.top_block._nsamps)
 
     def update_xaxis_slider(self, value):
         self._start = value
