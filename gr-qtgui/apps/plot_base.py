@@ -37,11 +37,7 @@ except ImportError:
     sys.stderr.write("Error: Program requires PyQt5 and gr-qtgui.\n")
     sys.exit(1)
 
-try:
-    import scipy
-except ImportError:
-    sys.stderr.write("Error: Scipy required (www.scipy.org).\n")
-    sys.exit(1)
+import numpy
 
 try:
     from gnuradio.qtgui.plot_constellation_form import *
