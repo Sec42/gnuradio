@@ -157,12 +157,12 @@ class source_chars_to_float(gr.hier_block2):
     def set_data(self, data):
         self.src.set_data(data)
 
-def find_max_nsamples(filelist):
+def find_max_nsamples(filelist, dtype_size=gr.sizeof_gr_complex):
     # Find the smallest number of samples in all files and use that as
     # a maximum value possible.
     filesizes = []
     for f in filelist:
         if(os.path.exists(f)):
-            filesizes.append(os.path.getsize(f) / gr.sizeof_gr_complex)
+            filesizes.append(os.path.getsize(f) / dtype_size)
     max_nsamples = min(filesizes)
     return max_nsamples
