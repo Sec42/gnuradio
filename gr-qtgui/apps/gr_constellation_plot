@@ -74,8 +74,8 @@ class my_top_block(gr.top_block):
         self.gui_snk = qtgui.const_sink_c(self._nsamps, "", self._nsigs)
         n = 0
         self.srcs = list()
-        self._data_min = sys.maxint
-        self._data_max = -sys.maxint - 1
+        self._data_min = sys.maxsize
+        self._data_max = -sys.maxsize - 1
         for f in filelist:
             data,_min,_max = read_samples_c(f, self._start, self._nsamps)
             self.srcs.append(blocks.vector_source_c(data))

@@ -175,7 +175,7 @@ class plot_form(QtWidgets.QWidget):
         self._style_edit = []
         self._marker_edit = []
         self._alpha_edit = []
-        for n in xrange(self.top_block._nsigs):
+        for n in range(self.top_block._nsigs):
             self._line_pages.append(QtWidgets.QDialog())
             self._line_forms.append(QtWidgets.QFormLayout(self._line_pages[-1]))
 
