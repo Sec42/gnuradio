@@ -47,7 +47,7 @@ class plot_psd_form(plot_form):
         self.right_col_layout.addLayout(self.right_col_form)
         self.layout.addLayout(self.right_col_layout, 1,4,1,1)
 
-        self.psd_size_val = QtWidgets.QIntValidator(0, 2**18, self)
+        self.psd_size_val = Qt.QIntValidator(0, 2**18, self)
         self.psd_size_edit = QtWidgets.QLineEdit(self)
         self.psd_size_edit.setMinimumWidth(50)
         self.psd_size_edit.setMaximumWidth(100)
@@ -63,7 +63,7 @@ class plot_psd_form(plot_form):
         self.right_col_form.addRow("Window:", self.psd_win_combo)
         self.psd_win_combo.currentIndexChanged.connect(self.update_psd_win)
 
-        self.psd_avg_val = QtWidgets.QDoubleValidator(0, 1.0, 4, self)
+        self.psd_avg_val = Qt.QDoubleValidator(0, 1.0, 4, self)
         self.psd_avg_edit = QtWidgets.QLineEdit(self)
         self.psd_avg_edit.setMinimumWidth(50)
         self.psd_avg_edit.setMaximumWidth(100)

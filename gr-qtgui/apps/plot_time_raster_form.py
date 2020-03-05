@@ -100,7 +100,7 @@ class plot_time_raster_form(plot_form):
             self._line_forms[-1].addRow("Color Map:", self._color_edit[-1])
             self._color_edit[-1].currentIndexChanged.connect(self.update_color_map)
 
-            alpha_val = QtWidgets.QDoubleValidator(0, 1.0, 2, self)
+            alpha_val = Qt.QDoubleValidator(0, 1.0, 2, self)
             alpha_val.setTop(1.0)
             alpha = self.top_block.gui_snk.line_alpha(n)
             self._alpha_edit.append(QtWidgets.QLineEdit(self))
